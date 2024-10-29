@@ -4,8 +4,8 @@ import {selectTodos} from './selectors';
 describe('Selectors', () => {
   const initialState: State = {
    todos: [
-     {title: 'todo1Title', isClosed: true},
-     {title: 'todo2Title', isClosed: false},
+     {id: 1, title: 'todo1Title', isClosed: true},
+     {id: 2, title: 'todo2Title', isClosed: false},
    ]
   };
 

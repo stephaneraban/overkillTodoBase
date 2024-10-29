@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { Todo } from '../models/todo';
 import { Store } from '@ngrx/store';
 import { selectTodos } from '../store/selectors';
-import { loadTodos, updateTodo, updateTodoSuccess } from '../store/actions';
+import { loadTodos, updateTodo } from '../store/actions';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 
 @Component({
