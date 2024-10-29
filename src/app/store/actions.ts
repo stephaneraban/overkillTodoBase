@@ -9,3 +9,13 @@ export const loadTodosSuccess = createAction(
 );
 
 export const loadTodosFailed = createAction('[Todos] Load todos failed');
+
+export const updateTodo = createAction('[Todos] Update Todo',
+  props<{ todo: Todo }>()
+);
+
+export const updateTodoSuccess = createAction('[Todos] Update Todo Success',
+  props<{ todo: Todo }>()
+);
+
+export const updateTodoFailed = createAction('[Todos] Update Todo Failed');

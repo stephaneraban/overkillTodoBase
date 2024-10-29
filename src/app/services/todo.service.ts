@@ -14,4 +14,10 @@ export class TodoService {
   list(): Observable<Todo[]> {
     return this.http.get<Todo[]>(`${environment.baseUrl}/api/todos`);
   }
+
+  updateTodo(todo: Todo): Observable<Todo> {
+    const url = `${environment.baseUrl}/api/todos/${todo.id}`;
+    return this.http.put<Todo>(url, todo).pipe(
+    );
+  }
 }
