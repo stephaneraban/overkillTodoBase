@@ -44,8 +44,8 @@ describe('TodoListComponent', () => {
     component = fixture.componentInstance;
 
     mockTodosSelector = store.overrideSelector(selectTodos, [
-      { title: 'todo 1', isClosed: false },
-      { title: 'todo 2', isClosed: true },
+      { id: 1, title: 'todo 1', isClosed: false},
+      { id: 2, title: 'todo 2', isClosed: true },
     ]);
 
     fixture.detectChanges();
