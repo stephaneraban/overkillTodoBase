@@ -24,7 +24,11 @@ describe('TodoService', () => {
   });
 
   it('should list todos', (done: DoneFn) => {
+<<<<<<< HEAD
     const mockedTodoList: Todo[] = [{ id: 1, title: 'todoTitle', isClosed: true, description: 'description 1' }];
+=======
+    const mockedTodoList: Todo[] = [{ id: 1, title: 'todoTitle', isClosed: true }];
+>>>>>>> bef0cae (feat[2]- TUs)
 
     service
       .list()

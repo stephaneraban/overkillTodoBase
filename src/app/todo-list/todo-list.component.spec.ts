@@ -44,7 +44,7 @@ describe('TodoListComponent', () => {
     component = fixture.componentInstance;
 
     mockTodosSelector = store.overrideSelector(selectTodos, [
-      { id: 1, title: 'todo 1', isClosed: false, description: 'description 1'},
+      { id: 1, title: 'todo 1', isClosed: false, description: 'description 1' },
       { id: 2, title: 'todo 2', isClosed: true, description: 'description 2' },
     ]);
 
