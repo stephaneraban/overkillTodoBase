@@ -7,13 +7,13 @@ import { Actions } from '@ngrx/effects';
 import { todosReducer } from './reducer';
 import { TodoService } from '../services/todo.service';
 import { cold, hot } from 'jasmine-marbles';
-import {loadTodos, loadTodosFailed, loadTodosSuccess} from './actions';
+import {loadTodos, loadTodosFailed, loadTodosSuccess, updateTodo, updateTodoFailed, updateTodoSuccess} from './actions';
 import { Todo } from '../models/todo';
 
 describe('Effects', () => {
   let effects: Effects;
   let actions: Observable<Actions>;
-  const todoService = jasmine.createSpyObj<TodoService>('TodoService', ['list']);
+  const todoService = jasmine.createSpyObj<TodoService>('TodoService', ['list','updateTodo']);
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -33,7 +33,7 @@ describe('Effects', () => {
 
   describe('loadTodos$', () => {
     it('should dispatch loadTodosSuccess action when todoService.list return a result', () => {
-      const mockedTodos: Todo[] = [{ title: 'aTitle', isClosed: true }];
+      const mockedTodos: Todo[] = [{ id: 1, title: 'aTitle', isClosed: true }];
       todoService.list.and.returnValue(of(mockedTodos));
 
       actions = hot('-a-', {
@@ -59,4 +59,36 @@ describe('Effects', () => {
       expect(effects.loadTodos$).toBeObservable(expected);
     });
   });
+
+  describe('updateTodo$', () => {
+    it('should dispatch updateTodoSuccess action when todoService.updateTodo return a result', () => {
+      // const mockedTodos: Todo[] = [{ id: 1, title: 'aTitle', isClosed: true }];
+      const mockedTodo: Todo = { id: 1, title: 'aTitle', isClosed: true };
+      todoService.updateTodo.and.returnValue(of(mockedTodo));
+
+      actions = hot('-a-', {
+        a: updateTodo({ todo: mockedTodo }),
+      });
+      const expected = cold('-b-', {
+        b: updateTodoSuccess({ todo: mockedTodo }),
+      });
+
+      expect(effects.updateTodos$).toBeObservable(expected);
+    });
+
+    // it('should dispatch updateTodoFailed action when todoService.updateTodo fails', () => {
+    //   const mockedTodo: Todo = { id: 1, title: 'aTitle', isClosed: true };
+    //   todoService.updateTodo.and.returnValue(cold('#'));
+
+    //   actions = hot('-a-', {
+    //     a: updateTodo({ todo: mockedTodo }),
+    //   });
+    //   const expected = cold('-b-', {
+    //     b: updateTodoFailed(),
+    //   });
+
+    //   expect(effects.updateTodos$).not.toBeObservable(expected);
+    // });
+  });
+
 });
