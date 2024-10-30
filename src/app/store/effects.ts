@@ -3,7 +3,6 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { loadOneTodo, loadOneTodoFailed, loadOneTodoSuccess, loadTodos, loadTodosFailed, loadTodosSuccess, updateTodo, updateTodoFailed, updateTodoSuccess } from './actions';
 import { catchError, map, mergeMap } from 'rxjs/operators';
 import { TodoService } from '../services/todo.service';
-import { of } from 'rxjs';
 
 @Injectable()
 export class Effects {

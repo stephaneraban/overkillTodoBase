@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
 import { Todo } from 'src/app/models/todo';
 import { loadOneTodo } from 'src/app/store/actions';
-import { selectTodo, selectTodoLoading } from 'src/app/store/selectors';
+import { selectTodoDiplayed, selectTodoLoading } from 'src/app/store/selectors';
 
 @Component({
   selector: 'app-todo-detail',
@@ -17,7 +17,7 @@ export class TodoDetailComponent implements OnInit {
   isLoading$: Observable<boolean> = of(false);
 
   constructor(private activatedRoute: ActivatedRoute, private store: Store) { 
-    this.todo$ = this.store.select(selectTodo);
+    this.todo$ = this.store.select(selectTodoDiplayed);
     this.isLoading$ = this.store.select(selectTodoLoading);
   }
 
