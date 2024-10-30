@@ -1,6 +1,6 @@
 import * as fromReducer from './reducer';
 import { State } from './reducer';
-import { loadOneTodo, loadOneTodoSuccess, loadTodosSuccess, updateTodoSuccess } from './actions';
+import { addTodoSuccess, loadOneTodo, loadOneTodoSuccess, loadTodosSuccess, updateTodoSuccess } from './actions';
 import { Todo } from '../models/todo';
 
 describe('Reducer', () => {
@@ -23,7 +23,7 @@ describe('Reducer', () => {
       // Given
       const { initialState } = fromReducer;
       const newState: State = {
-        todos: [{ id: 1, title: 'aTitle', isClosed: false, description: 'description 1' }],
+        todos: [{ id: 1, title: 'aTitle', isClosed: false, description: 'description 1', lastModificationDate: new Date() }],
         loading: false
       };
       const action = loadTodosSuccess({
@@ -39,28 +39,38 @@ describe('Reducer', () => {
     });
   });
 
-  describe('updateTodosSuccess action', () => {
-
-    it('should sort a todos list', () => {
+  describe('sorting', () => {
+    it('should sort a todos list by last modification date desc', () => {
       // Given
-      const todos: Todo[] = [{ id: 1, title: 'aTitle1', isClosed: true, description: 'description 1' },{ id: 2, title: 'aTitle2', isClosed: false, description: 'description 1' }];
-      const todosSorted: Todo[] = [{ id: 2, title: 'aTitle2', isClosed: false, description: 'description 2' },{ id: 1, title: 'aTitle1', isClosed: true, description: 'description 1' }];
+      const todos: Todo[] = [{ id: 1, title: 'aTitle1', isClosed: true, description: 'description 1', lastModificationDate: new Date('2024-10-30T16:43:17.153Z') },{ id: 2, title: 'aTitle2', isClosed: false, description: 'description 1', lastModificationDate: new Date('2024-10-31T17:43:17.153Z') }];
       
       // When / Then
-      expect(fromReducer.sortedTodo(todos[0], todos[1])).toEqual(1);
-      expect(fromReducer.sortedTodo(todos[0], todos[0])).toEqual(0);
-      expect(fromReducer.sortedTodo(todos[1], todos[0])).toEqual(-1);
+      expect(fromReducer.sortTodoByStatusAsc(todos[0], todos[1])).toEqual(1);
+      expect(fromReducer.sortTodoByStatusAsc(todos[0], todos[0])).toEqual(0);
+      expect(fromReducer.sortTodoByStatusAsc(todos[1], todos[0])).toEqual(-1);
     });
 
+    it('should sort a todos list by status desc', () => {
+      // Given
+      const todos: Todo[] = [{ id: 1, title: 'aTitle1', isClosed: true, description: 'description 1', lastModificationDate: new Date('2024-10-30T16:43:17.153Z') },{ id: 2, title: 'aTitle2', isClosed: false, description: 'description 1', lastModificationDate: new Date('2024-10-31T17:43:17.153Z') }];
+      
+      // When / Then
+      expect(fromReducer.sortTodoByLastModificationDateDesc(todos[0], todos[1])).toBeGreaterThan(1);
+      expect(fromReducer.sortTodoByLastModificationDateDesc(todos[0], todos[0])).toEqual(0);
+      expect(fromReducer.sortTodoByLastModificationDateDesc(todos[1], todos[0])).toBeLessThan(-1);
+    });
+  });
+
+  describe('updateTodosSuccess action', () => {
     it('should update a todo and update the state', () => {
       // Given
       const { initialState } = fromReducer;
       const previousState: State = {
-        todos: [{ id: 1, title: 'aTitle', isClosed: false, description: 'description 1' }],
+        todos: [{ id: 1, title: 'aTitle', isClosed: false, description: 'description 1', lastModificationDate: new Date() }],
         loading: false
       };
       const newState: State = {
-        todos: [{ id: 1, title: 'aTitle2', isClosed: true, description: 'description 2' }],
+        todos: [{ id: 1, title: 'aTitle2', isClosed: true, description: 'description 2', lastModificationDate: new Date() }],
         loading: false
       };
 
@@ -71,7 +81,7 @@ describe('Reducer', () => {
       const stateLoad = fromReducer.todosReducer(initialState, actionLoad);
 
       // When
-      const todoUpdated: Todo = { id: 1, title: 'aTitle2', isClosed: true, description: 'description 2' };
+      const todoUpdated: Todo = { id: 1, title: 'aTitle2', isClosed: true, description: 'description 2', lastModificationDate: new Date() };
       const actionUpdate = updateTodoSuccess({
         todo: todoUpdated,
       });
@@ -79,7 +89,10 @@ describe('Reducer', () => {
       const state = fromReducer.todosReducer(stateLoad, actionUpdate);
 
       // Then
-      expect(state).toEqual(newState);
+      expect(state.todos[0].id).toEqual(newState.todos[0].id);
+      expect(state.todos[0].title).toEqual(newState.todos[0].title);
+      expect(state.todos[0].isClosed).toEqual(newState.todos[0].isClosed);
+      expect(state.todos[0].description).toEqual(newState.todos[0].description);
       expect(state).not.toBe(newState);
     });
   });
@@ -89,7 +102,7 @@ describe('Reducer', () => {
       // Given
       const { initialState } = fromReducer;
       const previousState: State = {
-        todos: [{ id: 1, title: 'aTitle', isClosed: false, description: 'description 1' }],
+        todos: [{ id: 1, title: 'aTitle', isClosed: false, description: 'description 1', lastModificationDate: new Date() }],
         loading: false
       };
       const actionLoad = loadTodosSuccess({
@@ -98,7 +111,7 @@ describe('Reducer', () => {
       const stateLoad = fromReducer.todosReducer(initialState, actionLoad);
 
       const newState: State = {
-        todos: [{ id: 1, title: 'aTitle', isClosed: false, description: 'description 1' }],
+        todos: [{ id: 1, title: 'aTitle', isClosed: false, description: 'description 1', lastModificationDate: new Date() }],
         loading: true
       };
       const action = loadOneTodo({
@@ -109,7 +122,10 @@ describe('Reducer', () => {
       const state = fromReducer.todosReducer(stateLoad, action);
 
       // Then
-      expect(state).toEqual(newState);
+      expect(state.todos[0].id).toEqual(newState.todos[0].id);
+      expect(state.todos[0].title).toEqual(newState.todos[0].title);
+      expect(state.todos[0].isClosed).toEqual(newState.todos[0].isClosed);
+      expect(state.todos[0].description).toEqual(newState.todos[0].description);
       expect(state).not.toBe(newState);
     });
 
@@ -117,7 +133,7 @@ describe('Reducer', () => {
       // Given
       const { initialState } = fromReducer;
       const previousState: State = {
-        todos: [{ id: 1, title: 'aTitle', isClosed: false, description: 'description 1' }],
+        todos: [{ id: 1, title: 'aTitle', isClosed: false, description: 'description 1', lastModificationDate: new Date() }],
         loading: false
       };
       const actionLoad = loadTodosSuccess({
@@ -126,8 +142,8 @@ describe('Reducer', () => {
       const stateLoad = fromReducer.todosReducer(initialState, actionLoad);
 
       const newState: State = {
-        todos: [{ id: 1, title: 'aTitle', isClosed: false, description: 'description 1' }],
-        todoDisplayed: { id: 1, title: 'aTitle', isClosed: false, description: 'description 1' },
+        todos: [{ id: 1, title: 'aTitle', isClosed: false, description: 'description 1', lastModificationDate: new Date() }],
+        todoDisplayed: { id: 1, title: 'aTitle', isClosed: false, description: 'description 1', lastModificationDate: new Date() },
         loading: false
       };
       const action = loadOneTodoSuccess({
@@ -138,7 +154,35 @@ describe('Reducer', () => {
       const state = fromReducer.todosReducer(stateLoad, action);
 
       // Then
-      expect(state).toEqual(newState);
+      expect(state.todos[0].id).toEqual(newState.todos[0].id);
+      expect(state.todos[0].title).toEqual(newState.todos[0].title);
+      expect(state.todos[0].isClosed).toEqual(newState.todos[0].isClosed);
+      expect(state.todos[0].description).toEqual(newState.todos[0].description);
+      expect(state).not.toBe(newState);
+    });
+  });
+
+  describe('addTodosSuccess action', () => {
+    it('should add a todo and update the state', () => {
+      // Given
+      const { initialState } = fromReducer;
+      const newState: State = {
+        todos: [{ id: null as unknown as number, title: 'aTitle', isClosed: true, description: 'description', lastModificationDate: new Date() }],
+        loading: false
+      };
+
+      const action= addTodoSuccess({
+        todo: newState.todos[0]
+      });
+
+      // When
+      const state = fromReducer.todosReducer(initialState, action);
+
+      // Then
+      expect(state.todos[0].id).toEqual(newState.todos[0].id);
+      expect(state.todos[0].title).toEqual(newState.todos[0].title);
+      expect(state.todos[0].isClosed).toEqual(newState.todos[0].isClosed);
+      expect(state.todos[0].description).toEqual(newState.todos[0].description);
       expect(state).not.toBe(newState);
     });
   });

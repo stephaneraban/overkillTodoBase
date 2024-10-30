@@ -3,14 +3,26 @@
   max-width: 700px;
   margin: auto;
 
-  .strikethrough {
-    text-decoration: line-through;
+  .mat-card-title {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
   }
-  .libelle {
-    margin-left: 0.3rem;
+  .data {
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    .strikethrough {
+      text-decoration: line-through;
+    }
+    .libelle {
+      margin-left: 0.3rem;
+    }
+    .button-detail {
+      margin-left: 0.5rem;
+    }
   }
-  .button-detail {
-    margin-left: 0.5rem;
-  }
+  
 }
 

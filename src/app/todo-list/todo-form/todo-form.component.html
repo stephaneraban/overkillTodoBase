@@ -1,0 +1,36 @@
+<div id="container">
+    <mat-card>
+        <mat-card-title class="title">Add a todo</mat-card-title>
+        <ng-container>
+            <mat-card-content>
+                <form class="todo-form" [formGroup]="todoForm" (ngSubmit)="onSubmit()">
+                    <div class='row'>
+                        <div class='column'>
+                            <label>
+                                Title:
+                            </label>
+                        </div>
+                        <div class='column'>
+                            <input type="text" class="form-control" id="title" formControlName="title">
+                            <span class="error" *ngIf="(todoForm.get('title')?.dirty || todoForm.get('title')?.touched || todoForm.get('description')?.touched) && todoForm.get('title')?.hasError('required')">The title is required</span>
+                        </div>
+                    </div>
+                    <div class='row'>
+                        <div class='column'>
+                            <label>
+                                Description:
+                            </label>
+                        </div>
+                        <div class='column'>
+                            <input type="text" class="form-control" id="description" formControlName="description">
+                        </div>
+                    </div>
+                    <br>
+                    <div class="button">
+                        <button type="submit" >Add</button>
+                    </div>
+                </form>
+            </mat-card-content>
+        </ng-container>
+    </mat-card>
+</div>

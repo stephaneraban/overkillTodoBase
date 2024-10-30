@@ -36,4 +36,8 @@ export class TodoListComponent implements OnInit {
     this.router.navigateByUrl(url);
   }
 
+  goToEdit(): void {
+    this.router.navigateByUrl('edit');
+  }
+
 }
