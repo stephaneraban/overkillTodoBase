@@ -1,13 +1,13 @@
 import { Todo } from '../models/todo';
 import { createReducer, on } from '@ngrx/store';
-import { loadOneTodo, loadOneTodoSuccess, loadTodosSuccess, updateTodoSuccess } from './actions';
+import { addTodo, addTodoSuccess, loadOneTodo, loadOneTodoSuccess, loadTodosSuccess, updateTodoSuccess } from './actions';
 
 export const featureKey = 'todosStore';
 
 export interface State {
   todos: ReadonlyArray<Todo>;
   todoDisplayed?: Todo;
-  loading: boolean
+  loading: boolean,
 }
 
 export const initialState: State = {
@@ -15,21 +15,26 @@ export const initialState: State = {
   loading: false
 };
 
-// Sort Todo by status asc
-export const sortedTodo = (a: Todo, b: Todo) =>
+export const sortTodoByStatusAsc = (a: Todo, b: Todo) =>
   Number(a.isClosed) - Number(b.isClosed);
+
+export const sortTodoByLastModificationDateDesc = (a: Todo, b: Todo) =>
+  new Date(b.lastModificationDate).getTime() - new Date(a.lastModificationDate).getTime();
 
 export const todosReducer = createReducer(
   initialState,
-  on(loadTodosSuccess, (state, { todos }) => ({
-    ...state,
-    todos: [...todos].sort(sortedTodo),
-  })),
+  on(loadTodosSuccess, (state, { todos }) => {
+    return {
+      ...state,
+      todos: [...todos].sort(sortTodoByLastModificationDateDesc).sort(sortTodoByStatusAsc),
+    }
+  }),
   on(updateTodoSuccess, (state, { todo } ) => {
+    todo.lastModificationDate = new Date();
     const updatedTodos: Todo[] = state.todos.map(existingTodo => existingTodo.id === todo.id ? todo : existingTodo);
     return {
       ...state,
-      todos: updatedTodos.sort(sortedTodo)
+      todos: updatedTodos.sort(sortTodoByLastModificationDateDesc).sort(sortTodoByStatusAsc)
     }
   }),
   on(loadOneTodo, (state) => {
@@ -43,6 +48,13 @@ export const todosReducer = createReducer(
       ...state,
       todoDisplayed: todo,
       loading: false
+    }
+  }),
+  on(addTodoSuccess, (state, { todo } ) => {
+    return {
+      ...state,
+      todos: [ todo, ...state.todos ],
+      lastModificationDate: new Date()
     }
   }),
 );

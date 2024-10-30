@@ -33,3 +33,14 @@ export const updateTodoSuccess = createAction('[Todos] Update Todo Success',
 );
 
 export const updateTodoFailed = createAction('[Todos] Update Todo Failed');
+
+// add Todo
+export const addTodo = createAction('[Todos] Add Todo',
+  props<{ todo: Todo }>()
+);
+
+export const addTodoSuccess = createAction('[Todos] Add Todo Success',
+  props<{ todo: Todo }>()
+);
+
+export const addTodoFailed = createAction('[Todos] Add Todo Failed');

@@ -7,6 +7,18 @@
                     <div class='row'>
                         <div class='column'>
                             <div class='label'>
+                                Number:
+                            </div>
+                        </div>
+                        <div class='column'>
+                            <div class='value'>
+                                {{ (todo$ | async)?.id }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class='row'>
+                        <div class='column'>
+                            <div class='label'>
                                 Title:
                             </div>
                         </div>
@@ -37,6 +49,18 @@
                         <div class='column'>
                             <div class='value'>
                                 {{ (todo$ | async)?.description }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class='row'>
+                        <div class='column'>
+                            <div class='label'>
+                                Last modification date:
+                            </div>
+                        </div>
+                        <div class='column'>
+                            <div class='value'>
+                                {{ (todo$ | async)?.lastModificationDate | date:"MMM dd, yyyy 'at' HH:mm a" }}
                             </div>
                         </div>
                     </div>

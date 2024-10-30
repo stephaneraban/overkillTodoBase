@@ -8,7 +8,7 @@ export const selectTodos = createSelector(
   (state: State) => state.todos,
 );
 
-export const selectTodoDiplayed = createSelector(
+export const selectTodoDisplayed = createSelector(
   getState,
   (state: State) => state.todoDisplayed,
 );
