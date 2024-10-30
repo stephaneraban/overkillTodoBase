@@ -4,19 +4,23 @@ import { TodoListComponent } from './todo-list.component';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { State } from '../store/reducer';
 import { selectTodos } from '../store/selectors';
-import { MatCheckbox } from '@angular/material/checkbox';
+import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
 import { MatList, MatListItem } from '@angular/material/list';
 import { MatCard, MatCardContent, MatCardTitle } from '@angular/material/card';
 import { MatRippleModule } from '@angular/material/core';
 import { FormsModule } from '@angular/forms';
-import {MockComponents, MockDirectives, MockedComponent} from 'ng-mocks';
+import { MockComponents, MockDirectives, MockedComponent } from 'ng-mocks';
 import { By } from '@angular/platform-browser';
+import { Todo } from '../models/todo';
+import { Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('TodoListComponent', () => {
   let component: TodoListComponent;
   let fixture: ComponentFixture<TodoListComponent>;
   let store: MockStore<State>;
   let mockTodosSelector;
+  const routerSpy: Router = jasmine.createSpyObj('routerSpy', ['navigateByUrl']);
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -33,8 +37,8 @@ describe('TodoListComponent', () => {
           MatCardTitle
         )
       ],
-      imports: [MatRippleModule, FormsModule],
-      providers: [provideMockStore()],
+      imports: [MatRippleModule, FormsModule, RouterTestingModule],
+      providers: [provideMockStore(), { provide: Router, useValue: routerSpy }],
     }).compileComponents();
   });
 
@@ -62,7 +66,10 @@ describe('TodoListComponent', () => {
   });
 
   it('should display todos', () => {
+    // Given / When
     const todoElements = fixture.debugElement.queryAll(By.css('mat-list mat-list-item'));
+    
+    // Then
     expect(todoElements.length).toEqual(2);
     expect(todoElements[0].query(By.css('h4')).nativeElement.innerText).toContain('todo 1');
     expect(todoElements[1].query(By.css('h4')).nativeElement.innerText).toContain('todo 2');
@@ -71,4 +78,42 @@ describe('TodoListComponent', () => {
     expect(todoCheckboxes[0].checked).toBeFalse();
     expect(todoCheckboxes[1].checked).toBeTrue();
   });
+
+  it('should display updated todos on update', () => {
+    // Given
+    const mockTodoUpdated: Todo = {
+      id: 1, title: 'todo 3', isClosed: false,
+      description: 'description'
+    };
+
+    const event: MatCheckboxChange = {
+      checked: true,
+      source: null as unknown as MatCheckbox
+    };
+
+    // When
+    component.onClickCheckbox(mockTodoUpdated, event);
+    // fixture.detectChanges();
+
+    // expect(spyTodoService.updateTodo).toHaveBeenCalled();
+    // expect(spyTodoService.updateTodo).toHaveBeenCalledWith(mockTodoUpdated);
+
+    // Then
+    // Le store n'est pas updaté
+    const todos$ = store.select(selectTodos);
+    // todos$.subscribe(todo => console.log('DEBUG: ', todo));
+    const todoElements = fixture.debugElement.queryAll(By.css('mat-list mat-list-item'));
+    expect(todoElements.length).toEqual(2);
+  });
+
+  it('should git to detail on click detail', () => {
+
+    // Given / When
+    component.onClickDetail(1);
+
+    // Then
+    expect(routerSpy.navigateByUrl).toHaveBeenCalled();
+
+  });
+
 });

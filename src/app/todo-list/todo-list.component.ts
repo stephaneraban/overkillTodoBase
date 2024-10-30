@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Todo } from '../models/todo';
 import { Store } from '@ngrx/store';
-import { selectTodo, selectTodos } from '../store/selectors';
+import { selectTodos } from '../store/selectors';
 import { loadTodos, updateTodo } from '../store/actions';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { Router } from '@angular/router';

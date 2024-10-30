@@ -1,6 +1,6 @@
 import * as fromReducer from './reducer';
 import { State } from './reducer';
-import { loadTodosSuccess, updateTodoSuccess } from './actions';
+import { loadOneTodo, loadOneTodoSuccess, loadTodosSuccess, updateTodoSuccess } from './actions';
 import { Todo } from '../models/todo';
 
 describe('Reducer', () => {
@@ -52,8 +52,6 @@ describe('Reducer', () => {
       expect(fromReducer.sortedTodo(todos[1], todos[0])).toEqual(-1);
     });
 
-
-
     it('should update a todo and update the state', () => {
       // Given
       const { initialState } = fromReducer;
@@ -79,6 +77,65 @@ describe('Reducer', () => {
       });
 
       const state = fromReducer.todosReducer(stateLoad, actionUpdate);
+
+      // Then
+      expect(state).toEqual(newState);
+      expect(state).not.toBe(newState);
+    });
+  });
+
+  describe('loadOneTodoSuccess action', () => {
+    it('should retrieve one todo to be displayed on loadOneTodo and update the state', () => {
+      // Given
+      const { initialState } = fromReducer;
+      const previousState: State = {
+        todos: [{ id: 1, title: 'aTitle', isClosed: false, description: 'description 1' }],
+        loading: false
+      };
+      const actionLoad = loadTodosSuccess({
+        todos: [...previousState.todos],
+      });
+      const stateLoad = fromReducer.todosReducer(initialState, actionLoad);
+
+      const newState: State = {
+        todos: [{ id: 1, title: 'aTitle', isClosed: false, description: 'description 1' }],
+        loading: true
+      };
+      const action = loadOneTodo({
+        id: newState.todoDisplayed?.id as number,
+      });
+
+      // When
+      const state = fromReducer.todosReducer(stateLoad, action);
+
+      // Then
+      expect(state).toEqual(newState);
+      expect(state).not.toBe(newState);
+    });
+
+    it('should retrieve one todo to be displayed on loadOneTodoSuccess and update the state', () => {
+      // Given
+      const { initialState } = fromReducer;
+      const previousState: State = {
+        todos: [{ id: 1, title: 'aTitle', isClosed: false, description: 'description 1' }],
+        loading: false
+      };
+      const actionLoad = loadTodosSuccess({
+        todos: [...previousState.todos],
+      });
+      const stateLoad = fromReducer.todosReducer(initialState, actionLoad);
+
+      const newState: State = {
+        todos: [{ id: 1, title: 'aTitle', isClosed: false, description: 'description 1' }],
+        todoDisplayed: { id: 1, title: 'aTitle', isClosed: false, description: 'description 1' },
+        loading: false
+      };
+      const action = loadOneTodoSuccess({
+        todo: newState.todoDisplayed as Todo,
+      });
+
+      // When
+      const state = fromReducer.todosReducer(stateLoad, action);
 
       // Then
       expect(state).toEqual(newState);
