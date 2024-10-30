@@ -48,8 +48,8 @@ describe('TodoListComponent', () => {
     component = fixture.componentInstance;
 
     mockTodosSelector = store.overrideSelector(selectTodos, [
-      { id: 1, title: 'todo 1', isClosed: false, description: 'description 1' },
-      { id: 2, title: 'todo 2', isClosed: true, description: 'description 2' },
+      { id: 1, title: 'todo 1', isClosed: false, description: 'description 1', lastModificationDate: new Date() },
+      { id: 2, title: 'todo 2', isClosed: true, description: 'description 2', lastModificationDate: new Date() },
     ]);
 
     fixture.detectChanges();
@@ -60,8 +60,11 @@ describe('TodoListComponent', () => {
   });
 
   it('should display a title', () => {
-    expect(fixture.debugElement.query(By.css('mat-card-title')).nativeElement.innerText).toEqual(
+    expect(fixture.debugElement.query(By.css('mat-card-title')).nativeElement.innerText).toContain(
       'Todos'
+    );
+    expect(fixture.debugElement.query(By.css('mat-card-title')).nativeElement.innerText).toContain(
+      'Add'
     );
   });
 
@@ -83,7 +86,8 @@ describe('TodoListComponent', () => {
     // Given
     const mockTodoUpdated: Todo = {
       id: 1, title: 'todo 3', isClosed: false,
-      description: 'description'
+      description: 'description',
+      lastModificationDate: new Date()
     };
 
     const event: MatCheckboxChange = {
@@ -106,14 +110,22 @@ describe('TodoListComponent', () => {
     expect(todoElements.length).toEqual(2);
   });
 
-  it('should git to detail on click detail', () => {
+  it('should go to detail on click Detail', () => {
 
     // Given / When
     component.onClickDetail(1);
 
     // Then
     expect(routerSpy.navigateByUrl).toHaveBeenCalled();
+  });
 
+  it('should go to edit on click Add', () => {
+
+    // Given / When
+    component.goToEdit();
+
+    // Then
+    expect(routerSpy.navigateByUrl).toHaveBeenCalled();
   });
 
 });

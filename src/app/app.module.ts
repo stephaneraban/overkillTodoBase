@@ -11,7 +11,7 @@ import {MatCardModule} from '@angular/material/card';
 import {MatListModule} from '@angular/material/list';
 import {MatGridListModule} from '@angular/material/grid-list' 
 import {MatCheckboxModule} from '@angular/material/checkbox';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {StoreModule} from '@ngrx/store';
 import {todosReducer} from './store/reducer';
 import {environment} from '../environments/environment';
@@ -23,13 +23,15 @@ import {MockTodoApi} from './services/mock-todo-api';
 import {HttpClientInMemoryWebApiModule} from 'angular-in-memory-web-api';
 import { TodoDetailComponent } from './todo-list/todo-detail/todo-detail.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { TodoFormComponent } from './todo-list/todo-form/todo-form.component';
  
 
 @NgModule({
   declarations: [
     AppComponent,
     TodoListComponent,
-    TodoDetailComponent
+    TodoDetailComponent,
+    TodoFormComponent
   ],
   imports: [
     BrowserModule,
@@ -47,7 +49,8 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     EffectsModule.forRoot([Effects]),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
     MatGridListModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

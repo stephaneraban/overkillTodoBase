@@ -1,19 +1,29 @@
 <div id="container">
   <mat-card>
-    <mat-card-title>Todos</mat-card-title>
+    <mat-card-title>
+      <div>Todos</div>
+      <div>
+        <button type="button" (click)="goToEdit()">Add</button>
+      </div>
+    </mat-card-title>
+    
     <mat-card-content>
       <mat-list>
         <mat-list-item *ngFor="let todo of todos$ | async">
           <h4 matLine>
-            <mat-checkbox
-              [checked]="todo.isClosed"
-              disabled="false"
-              (change)="onClickCheckbox(todo,$event)"
-            ></mat-checkbox>
-            <span [ngClass]="!todo.isClosed ? 'null' : 'strikethrough'" class="libelle">{{ todo.title }}</span>
-            <button type="button" (click)="onClickDetail(todo.id)" class="button-detail">
-              Detail
-            </button>
+            <div class="data">
+              <div>
+                <mat-checkbox
+                [checked]="todo.isClosed"
+                disabled="false"
+                (change)="onClickCheckbox(todo,$event)"
+                ></mat-checkbox>
+                <span [ngClass]="!todo.isClosed ? 'null' : 'strikethrough'" class="libelle">{{ todo.title }}</span>
+              </div>
+              <button type="button" (click)="onClickDetail(todo.id)" class="button-detail">
+                Detail
+              </button>             
+            </div>
           </h4>
         </mat-list-item>
       </mat-list>
