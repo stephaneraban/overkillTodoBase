@@ -22,7 +22,10 @@ describe('Reducer', () => {
     it('should retrieve all todos and update the state', () => {
       // Given
       const { initialState } = fromReducer;
-      const newState: State = { todos: [{ id: 1, title: 'aTitle', isClosed: false }] };
+      const newState: State = {
+        todos: [{ id: 1, title: 'aTitle', isClosed: false, description: 'description 1' }],
+        loading: false
+      };
       const action = loadTodosSuccess({
         todos: [...newState.todos],
       });
@@ -40,8 +43,8 @@ describe('Reducer', () => {
 
     it('should sort a todos list', () => {
       // Given
-      const todos: Todo[] = [{ id: 1, title: 'aTitle1', isClosed: true },{ id: 2, title: 'aTitle2', isClosed: false }];
-      const todosSorted: Todo[] = [{ id: 2, title: 'aTitle2', isClosed: false },{ id: 1, title: 'aTitle1', isClosed: true }];
+      const todos: Todo[] = [{ id: 1, title: 'aTitle1', isClosed: true, description: 'description 1' },{ id: 2, title: 'aTitle2', isClosed: false, description: 'description 1' }];
+      const todosSorted: Todo[] = [{ id: 2, title: 'aTitle2', isClosed: false, description: 'description 2' },{ id: 1, title: 'aTitle1', isClosed: true, description: 'description 1' }];
       
       // When / Then
       expect(fromReducer.sortedTodo(todos[0], todos[1])).toEqual(1);
@@ -54,8 +57,14 @@ describe('Reducer', () => {
     it('should update a todo and update the state', () => {
       // Given
       const { initialState } = fromReducer;
-      const previousState: State = { todos: [{ id: 1, title: 'aTitle', isClosed: false }] };
-      const newState: State = { todos: [{ id: 1, title: 'aTitle2', isClosed: true }] };
+      const previousState: State = {
+        todos: [{ id: 1, title: 'aTitle', isClosed: false, description: 'description 1' }],
+        loading: false
+      };
+      const newState: State = {
+        todos: [{ id: 1, title: 'aTitle2', isClosed: true, description: 'description 2' }],
+        loading: false
+      };
 
       const actionLoad = loadTodosSuccess({
         todos: [...previousState.todos],
@@ -64,7 +73,7 @@ describe('Reducer', () => {
       const stateLoad = fromReducer.todosReducer(initialState, actionLoad);
 
       // When
-      const todoUpdated: Todo = { id: 1, title: 'aTitle2', isClosed: true };
+      const todoUpdated: Todo = { id: 1, title: 'aTitle2', isClosed: true, description: 'description 2' };
       const actionUpdate = updateTodoSuccess({
         todo: todoUpdated,
       });

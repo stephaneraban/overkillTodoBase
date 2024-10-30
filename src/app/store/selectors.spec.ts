@@ -3,10 +3,11 @@ import {selectTodos} from './selectors';
 
 describe('Selectors', () => {
   const initialState: State = {
-   todos: [
-     {id: 1, title: 'todo1Title', isClosed: true},
-     {id: 2, title: 'todo2Title', isClosed: false},
-   ]
+    todos: [
+      { id: 1, title: 'todo1Title', isClosed: true, description: 'description 1' },
+      { id: 2, title: 'todo2Title', isClosed: false, description: 'description 2' },
+    ],
+    loading: false
   };
 
   it('should select todos list', () => {

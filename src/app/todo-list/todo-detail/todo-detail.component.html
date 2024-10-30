@@ -1,0 +1,55 @@
+<div id="container">
+    <mat-card>
+        <mat-card-title class="title">Todo</mat-card-title>
+        <ng-container *ngIf="!(isLoading$ | async)">
+            <mat-card-content>
+                <mat-list-item>
+                    <div class='row'>
+                        <div class='column'>
+                            <div class='blue-column'>
+                                Title:
+                            </div>
+                        </div>
+                        <div class='column'>
+                            <div class='green-column'>
+                                {{ (todo$ | async)?.title }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class='row'>
+                        <div class='column'>
+                            <div class='blue-column'>
+                                Is closed:
+                            </div>
+                        </div>
+                        <div class='column'>
+                            <div class='green-column'>
+                                {{ (todo$ | async)?.isClosed }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class='row'>
+                        <div class='column'>
+                            <div class='blue-column'>
+                                Description:
+                            </div>
+                        </div>
+                        <div class='column'>
+                            <div class='green-column'>
+                                {{ (todo$ | async)?.description }}
+                            </div>
+                        </div>
+                    </div>
+                </mat-list-item>
+            </mat-card-content>
+        </ng-container>
+        <ng-container *ngIf="(isLoading$ | async)">
+            <mat-progress-spinner
+            mode="indeterminate">
+            </mat-progress-spinner>
+        </ng-container>
+       
+    </mat-card>
+    
+    
+</div>
