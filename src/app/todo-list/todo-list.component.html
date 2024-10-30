@@ -11,6 +11,9 @@
               (change)="onClickCheckbox(todo,$event)"
             ></mat-checkbox>
             <span [ngClass]="!todo.isClosed ? 'null' : 'strikethrough'" class="libelle">{{ todo.title }}</span>
+            <button type="button" (click)="onClickDetail(todo.id)" class="button-detail">
+              Detail
+            </button>
           </h4>
         </mat-list-item>
       </mat-list>

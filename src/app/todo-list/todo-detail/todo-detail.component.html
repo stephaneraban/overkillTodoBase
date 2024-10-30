@@ -1,0 +1,52 @@
+<div id="container">
+    <mat-card>
+        <mat-card-title class="title">Todo</mat-card-title>
+        <ng-container *ngIf="!(isLoading$ | async)">
+            <mat-card-content>
+                <mat-list-item>
+                    <div class='row'>
+                        <div class='column'>
+                            <div class='label'>
+                                Title:
+                            </div>
+                        </div>
+                        <div class='column'>
+                            <div class='value'>
+                                {{ (todo$ | async)?.title }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class='row'>
+                        <div class='column'>
+                            <div class='label'>
+                                Is closed:
+                            </div>
+                        </div>
+                        <div class='column'>
+                            <div class='value'>
+                                {{ (todo$ | async)?.isClosed }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class='row'>
+                        <div class='column'>
+                            <div class='label'>
+                                Description:
+                            </div>
+                        </div>
+                        <div class='column'>
+                            <div class='value'>
+                                {{ (todo$ | async)?.description }}
+                            </div>
+                        </div>
+                    </div>
+                </mat-list-item>
+            </mat-card-content>
+        </ng-container>
+        <ng-container *ngIf="(isLoading$ | async)">
+            <mat-progress-spinner
+            mode="indeterminate">
+            </mat-progress-spinner>
+        </ng-container>
+    </mat-card>
+</div>
