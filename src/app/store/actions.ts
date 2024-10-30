@@ -1,6 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { Todo } from '../models/todo';
 
+// Load Todos
 export const loadTodos = createAction('[Todos] Load todos');
 
 export const loadTodosSuccess = createAction(
@@ -10,6 +11,19 @@ export const loadTodosSuccess = createAction(
 
 export const loadTodosFailed = createAction('[Todos] Load todos failed');
 
+// load One Todo
+export const loadOneTodo = createAction('[Todos] Load one todo',
+  props<{ id: number }>()
+);
+
+export const loadOneTodoSuccess = createAction(
+  '[Todos] Load one todo success',
+  props<{ todo: Todo }>()
+);
+
+export const loadOneTodoFailed = createAction('[Todos] Load one todo failed');
+
+// update Todo
 export const updateTodo = createAction('[Todos] Update Todo',
   props<{ todo: Todo }>()
 );

@@ -7,3 +7,13 @@ export const selectTodos = createSelector(
   getState,
   (state: State) => state.todos,
 );
+
+export const selectTodo = createSelector(
+  getState,
+  (state: State) => state.todoDisplayed,
+);
+
+export const selectTodoLoading = createSelector(
+  getState,
+  (state: State) => state.loading,
+);

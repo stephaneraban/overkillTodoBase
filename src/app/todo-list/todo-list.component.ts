@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Todo } from '../models/todo';
 import { Store } from '@ngrx/store';
-import { selectTodos } from '../store/selectors';
+import { selectTodo, selectTodos } from '../store/selectors';
 import { loadTodos, updateTodo } from '../store/actions';
 import { MatCheckboxChange } from '@angular/material/checkbox';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-todo-list',
@@ -14,7 +15,7 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 export class TodoListComponent implements OnInit {
   todos$: Observable<ReadonlyArray<Todo>>;
 
-  constructor(private store: Store) {
+  constructor(private store: Store, private router: Router) {
     this.todos$ = this.store.select(selectTodos);
   }
 
@@ -25,6 +26,14 @@ export class TodoListComponent implements OnInit {
   onClickCheckbox(todo: Todo, event: MatCheckboxChange): void {
     todo.isClosed = event.checked;
     this.store.dispatch(updateTodo({ todo: todo }));
-    this.store.dispatch(loadTodos());
   }
+
+  onClickDetail(id: number): void {
+    this.goToDetail(`detail/${id}`);
+  }
+
+  private goToDetail(url: string): void {
+    this.router.navigateByUrl(url);
+  }
+
 }

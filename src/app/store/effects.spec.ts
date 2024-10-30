@@ -33,7 +33,7 @@ describe('Effects', () => {
 
   describe('loadTodos$', () => {
     it('should dispatch loadTodosSuccess action when todoService.list return a result', () => {
-      const mockedTodos: Todo[] = [{ id: 1, title: 'aTitle', isClosed: true }];
+      const mockedTodos: Todo[] = [{ id: 1, title: 'aTitle', isClosed: true, description: 'description 1' }];
       todoService.list.and.returnValue(of(mockedTodos));
 
       actions = hot('-a-', {
@@ -62,8 +62,7 @@ describe('Effects', () => {
 
   describe('updateTodo$', () => {
     it('should dispatch updateTodoSuccess action when todoService.updateTodo return a result', () => {
-      // const mockedTodos: Todo[] = [{ id: 1, title: 'aTitle', isClosed: true }];
-      const mockedTodo: Todo = { id: 1, title: 'aTitle', isClosed: true };
+      const mockedTodo: Todo = { id: 1, title: 'aTitle', isClosed: true, description: 'description 1' };
       todoService.updateTodo.and.returnValue(of(mockedTodo));
 
       actions = hot('-a-', {
@@ -76,19 +75,19 @@ describe('Effects', () => {
       expect(effects.updateTodos$).toBeObservable(expected);
     });
 
-    // it('should dispatch updateTodoFailed action when todoService.updateTodo fails', () => {
-    //   const mockedTodo: Todo = { id: 1, title: 'aTitle', isClosed: true };
-    //   todoService.updateTodo.and.returnValue(cold('#'));
+    it('should dispatch updateTodoFailed action when todoService.updateTodo fails', () => {
+      const mockedTodo: Todo = { id: 1, title: 'aTitle', isClosed: true, description: 'description 1' };
+      todoService.updateTodo.and.returnValue(cold('#'));
 
-    //   actions = hot('-a-', {
-    //     a: updateTodo({ todo: mockedTodo }),
-    //   });
-    //   const expected = cold('-b-', {
-    //     b: updateTodoFailed(),
-    //   });
+      actions = hot('-a-', {
+        a: updateTodo({ todo: mockedTodo }),
+      });
+      const expected = cold('-b-', {
+        b: updateTodoFailed(),
+      });
 
-    //   expect(effects.updateTodos$).not.toBeObservable(expected);
-    // });
+      expect(effects.updateTodos$).toBeObservable(expected);
+    });
   });
 
 });
