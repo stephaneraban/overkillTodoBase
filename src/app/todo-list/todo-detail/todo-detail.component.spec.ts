@@ -4,7 +4,7 @@ import { TodoDetailComponent } from './todo-detail.component';
 import { ActivatedRoute, provideRouter } from '@angular/router';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { State } from 'src/app/store/reducer';
-import { selectTodoDisplayed } from 'src/app/store/selectors';
+import { selectTodoDisplayed, selectTodoLoading } from 'src/app/store/selectors';
 import { Todo } from 'src/app/models/todo';
 import { loadOneTodo } from 'src/app/store/actions';
 
@@ -18,7 +18,17 @@ describe('TodoDetailComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ TodoDetailComponent ],
-      providers: [provideRouter([]),provideMockStore()]
+      providers: [provideRouter([]),provideMockStore(), {
+        provide: ActivatedRoute,
+         useValue: {
+          snapshot: {
+            params: {
+                  id: 1,
+            },
+        },
+        },
+       },
+      ]
     })
     .compileComponents();
   });
@@ -29,6 +39,7 @@ describe('TodoDetailComponent', () => {
     component = fixture.componentInstance;
 
     mockTodosSelector = store.overrideSelector(selectTodoDisplayed,mockTodoDisplayed);
+    mockTodosSelector = store.overrideSelector(selectTodoLoading, false);
 
     fixture.detectChanges();
   });
