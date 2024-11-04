@@ -95,6 +95,40 @@ describe('Reducer', () => {
       expect(state.todos[0].description).toEqual(newState.todos[0].description);
       expect(state).not.toBe(newState);
     });
+
+    it('should update a todo with existing if id is not found and update the state', () => {
+      // Given
+      const { initialState } = fromReducer;
+      const previousState: State = {
+        todos: [{ id: 1, title: 'aTitle', isClosed: false, description: 'description 1', lastModificationDate: new Date() }],
+        loading: false
+      };
+      const newState: State = {
+        todos: [{ id: 1, title: 'aTitle2', isClosed: true, description: 'description 2', lastModificationDate: new Date() }],
+        loading: false
+      };
+
+      const actionLoad = loadTodosSuccess({
+        todos: [...previousState.todos],
+      });
+
+      const stateLoad = fromReducer.todosReducer(initialState, actionLoad);
+
+      // When
+      const todoUpdated: Todo = { id: 10, title: 'aTitle2', isClosed: true, description: 'description 2', lastModificationDate: new Date() };
+      const actionUpdate = updateTodoSuccess({
+        todo: todoUpdated,
+      });
+
+      const state = fromReducer.todosReducer(stateLoad, actionUpdate);
+
+      // Then
+      expect(state.todos[0].id).toEqual(previousState.todos[0].id);
+      expect(state.todos[0].title).toEqual(previousState.todos[0].title);
+      expect(state.todos[0].isClosed).toEqual(previousState.todos[0].isClosed);
+      expect(state.todos[0].description).toEqual(previousState.todos[0].description);
+      expect(state).not.toBe(previousState);
+    });
   });
 
   describe('loadOneTodoSuccess action', () => {

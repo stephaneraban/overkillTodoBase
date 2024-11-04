@@ -29,10 +29,10 @@ describe('TodoService', () => {
     service
       .list()
       .pipe(first())
-      .subscribe((res: Todo[]) => {
-        expect(res).toEqual(mockedTodoList);
-        done();
-      }, done.fail);
+      .subscribe({
+        next: (res: Todo[]) => { expect(res).toEqual(mockedTodoList), done() },
+        error: done.fail
+      });
 
     const req = httpMock.expectOne(
       (r) => r.url === `${environment.baseUrl}/api/todos`
@@ -44,14 +44,14 @@ describe('TodoService', () => {
 
   it('should get by id one todo', (done: DoneFn) => {
     const mockedTodo: Todo = { id: 1, title: 'todoTitle', isClosed: true, description: 'description 1', lastModificationDate: new Date() };
-
-    service
+    
+      service
       .getbyId(mockedTodo.id)
       .pipe(first())
-      .subscribe((res: Todo) => {
-        expect(res).toEqual(mockedTodo);
-        done();
-      }, done.fail);
+      .subscribe({
+        next: (res: Todo) => { expect(res).toEqual(mockedTodo), done() },
+        error: done.fail
+      });
 
     const req = httpMock.expectOne(
       (r) => r.url === `${environment.baseUrl}/api/todos/${mockedTodo.id}`
@@ -67,10 +67,10 @@ describe('TodoService', () => {
     service
       .updateTodo(mockedTodoUpdated)
       .pipe(first())
-      .subscribe((res: Todo) => {
-        expect(res).toEqual(mockedTodoUpdated);
-        done();
-      }, done.fail);
+      .subscribe({
+        next: (res: Todo) => { expect(res).toEqual(mockedTodoUpdated), done() },
+        error: done.fail
+      });
 
     const req = httpMock.expectOne(
       (r) => r.url === `${environment.baseUrl}/api/todos/${mockedTodoUpdated.id}`
@@ -86,10 +86,10 @@ describe('TodoService', () => {
     service
       .addTodo(mockedTodo)
       .pipe(first())
-      .subscribe((res: Todo) => {
-        expect(res).toEqual(mockedTodo);
-        done();
-      }, done.fail);
+      .subscribe({
+        next: (res: Todo) => { expect(res).toEqual(mockedTodo), done() },
+        error: done.fail
+      });
 
     const req = httpMock.expectOne(
       (r) => r.url === `${environment.baseUrl}/api/todos`
@@ -98,6 +98,5 @@ describe('TodoService', () => {
 
     req.flush(mockedTodo);
   });
-  
 
 });
